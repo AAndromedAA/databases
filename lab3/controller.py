@@ -3,7 +3,7 @@ import model
 
 inp_requests = dict({"goods": ["Enter name", "Enter price", "Enter discount", "Enter guarantee",
                                "Enter category ID"],
-                     "customer": ["Enter surname", "Enter name", "Enter father name"],
+                     "customer": ["Enter surname", "Enter name", "Enter father name", "Enter favourites"],
                      "phone": ["Enter phone number", "Enter customer ID"],
                      "email": ["Enter email", "Enter customer ID"],
                      "order": ["Enter date", "Enter goods ID", "Enter customer ID", "Enter confirming method"],
@@ -12,7 +12,7 @@ inp_requests = dict({"goods": ["Enter name", "Enter price", "Enter discount", "E
 
 def validate(option, item):
     if option == "goods":
-        return True if (item[0].isalnum() and item[1].isdigit() and item[2].isdigit() and item[3].isdigit() and
+        return True if (item[1].isdigit() and item[2].isdigit() and item[3].isdigit() and
                         item[4].isdigit()) else False
     if option == "customer":
         return True if (item[0].isalpha() and item[1].isalpha() and item[2].isalpha()) else False
@@ -43,6 +43,7 @@ class Controller:
             else:
                 raise Exception("Incorrect type of entered values")
         if option == "customer":
+            item[len(item) - 1] = item[len(item) - 1].split(",")
             if validate(option, item):
                 self.view.insert_customer(item)
             else:
@@ -80,7 +81,7 @@ class Controller:
         return new_entity
 
     goods_attrs = ['goods_id', 'name', 'price', 'discount', 'guarantee', 'category_id']
-    customer_attrs = ['customer_id', 'surname', 'name', 'father_name']
+    customer_attrs = ['customer_id', 'surname', 'name', 'father_name', 'favourites']
     phone_attrs = ['phone', 'customer_id']
     email_attrs = ['email', 'customer_id']
     category_attrs = ['category_id', 'name', 'parent_category_id']
@@ -96,6 +97,8 @@ class Controller:
             curr_item = self.mod.read_goods_by_pk(int(item_pk))
             self.view.update_goods(self.fill_entity(curr_item, item, new_item, self.goods_attrs))
         if option == "customer":
+            if item[len(item) - 1] != '':
+                item[len(item) - 1] = item[len(item) - 1].split(',')
             curr_item = self.mod.read_customer_by_pk(int(item_pk))
             self.view.update_customer(self.fill_entity(curr_item, item, new_item, self.customer_attrs))
         if option == "phone":

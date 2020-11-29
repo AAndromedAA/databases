@@ -59,12 +59,12 @@ class Model:
         return self.session.query(Customer).filter(Customer.customer_id == customer_pk).one()
 
     def insert_customer(self, customer):
-        self.session.add(Customer(customer[0], customer[1], customer[2]))
+        self.session.add(Customer(customer[0], customer[1], customer[2], customer[3]))
         self.session.commit()
 
     def update_customer(self, customer):
         self.session.query(Customer).filter(Customer.customer_id == customer[0]) \
-            .update({'surname': customer[1], 'name': customer[2], 'father_name': customer[3]})
+        .update({'surname': customer[1], 'name': customer[2], 'father_name': customer[3], 'favourites': customer[4]})
         self.session.commit()
 
     def delete_customer(self, customer_start_id, customer_end_id):
